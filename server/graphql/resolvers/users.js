@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const {GraphQLError} = require('graphql')
 const {validateRegisterInput,validateLoginInput} = require('../../utils/validators')
 const User = require("../../models/User");
+const mongoose = require("mongoose");
 
 function generateTokn (user){
     const token = jwt.sign(
@@ -18,9 +19,9 @@ function generateTokn (user){
 }
 module.exports = {
   Query:{
-    async getUsers(){
+    async getUsers(_,{id}){
       try{ 
-        const users = User.find().sort({createdAt : -1})
+        const users = User.find({_id : {$ne : mongoose.Types.ObjectId(id)}}).sort({createdAt : -1})
         return users
        } catch(e){
            throw new Error(e)

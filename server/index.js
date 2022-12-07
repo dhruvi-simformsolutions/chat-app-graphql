@@ -46,8 +46,7 @@ const server = new ApolloServer({
           };
         },
       },
-    ],
-    context: ({ req }) => ({ req})
+    ]
 });
   
  await server.start();
