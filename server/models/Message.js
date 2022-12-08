@@ -6,11 +6,11 @@ const messageSchema = new Schema(
     createdAt : String,
     sender :{
         type : Schema.Types.ObjectId,
-        ref : 'users'
+        ref : 'User'
     },
     receiver :{
         type : Schema.Types.ObjectId,
-        ref : 'users'
+        ref : 'User'
     }
   }
 );

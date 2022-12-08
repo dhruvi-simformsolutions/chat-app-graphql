@@ -8,6 +8,7 @@ const {WebSocketServer} = require('ws')
 const {useServer} = require('graphql-ws/lib/use/ws') // it is use to create the server.
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
+const cors = require('cors');
 require('dotenv').config()
 
 // Manually Create File Import
@@ -28,7 +29,6 @@ const wsServer = new WebSocketServer({
   path: '/graphql',
 });
 const serverCleanup = useServer({ schema }, wsServer);
-
 // Set up ApolloServer.
 const server = new ApolloServer({
     schema,
@@ -50,6 +50,7 @@ const server = new ApolloServer({
 });
   
  await server.start();
+ app.use(cors())
   app.use('/graphql',  bodyParser.json(), expressMiddleware(server));
 
   mongoose

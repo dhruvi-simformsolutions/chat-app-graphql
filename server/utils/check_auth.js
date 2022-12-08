@@ -2,7 +2,6 @@ const jwt = require('jsonwebtoken');
 const {GraphQLError} = require('graphql')
 module.exports =(context) =>{
     // context = {...heaeder}
-    console.log("contextcontextcontext",context)
     const authHeader = context?.req?.headers?.authorization;
     if(authHeader){
         const token = authHeader.split("Bearer ")[1];

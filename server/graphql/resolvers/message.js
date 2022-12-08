@@ -7,7 +7,14 @@ module.exports = {
     Query: {
        async getMessages(_,{sender,receiver}) {
            try{ 
-            const message = await Message.find({sender: mongoose.Types.ObjectId(sender),receiver: mongoose.Types.ObjectId(receiver)})
+            const message = await Message.find(
+                {
+                    $or : [
+                        {sender: mongoose.Types.ObjectId(sender),receiver: mongoose.Types.ObjectId(receiver)},
+                        {sender: mongoose.Types.ObjectId(receiver),receiver: mongoose.Types.ObjectId(sender)}
+                    ]
+                }
+                )
             return message;
         } catch(e){
                throw new Error(e)
@@ -24,7 +31,12 @@ module.exports = {
                 createdAt : new Date().toString()
             });
             const message = await newMessage.save();
-            const allMessage = await Message.find({sender: mongoose.Types.ObjectId(sender),receiver: mongoose.Types.ObjectId(receiver)})
+            const allMessage = await Message.find({
+                $or : [
+                    {sender: mongoose.Types.ObjectId(sender),receiver: mongoose.Types.ObjectId(receiver)},
+                    {sender: mongoose.Types.ObjectId(receiver),receiver: mongoose.Types.ObjectId(sender)}
+                ]
+            })
             pubSub.publish("NEW_MESSAGE", { newMessages: allMessage });
             return message;
         }
